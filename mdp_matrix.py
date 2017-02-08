@@ -1,7 +1,7 @@
 import numpy as np
 
 class MDP:
-    def __init__(self, T, S, R, A, act_list):
+    def __init__(self, T, S, R, A, act_list, terminal_states):
         # State space
         # Integer number of states
         self.S = S
