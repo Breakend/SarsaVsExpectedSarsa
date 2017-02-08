@@ -1,7 +1,7 @@
 import numpy as np
 
 class MDP:
-    def __init__(self, T, S, R, A, act_list):
+    def __init__(self, T, S, R, A, act_list, terminal_states):
         # State space
         # Integer number of states
         self.S = S
@@ -37,7 +37,7 @@ class GridWorld(MDP):
             R[row[0], row[1]] = row[2]
         R = R.flatten()
 
-        A = 4
+        A = 4.0
         act_list = ['S', 'E', 'N', 'W']
 
         T = np.zeros((S, A, S))
