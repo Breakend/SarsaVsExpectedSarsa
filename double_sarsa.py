@@ -14,23 +14,22 @@ def double_sarsa(mdp, alpha = 0.1, gamma = 0.9):
     # generate an arbitrary policy
     pol = [1]*mdp.S
 
-    old_Q = Q
-
     n_iter = 0
     epsilon = 0.1
 
-    while n_iter < 10000000: # TODO: Pick a finish condition for episode
+    while n_iter < 100000: # TODO: Pick a finish condition for episode
         s = 0 # Initialize s, starting state
 
         # With prob epsilon, pick a random action
         if np.random.random_sample() <= epsilon:
             a = np.random.random_integers(0, mdp.A-1)
         else:
-            a = np.argmax(Q[s][:])
+            # import pdb; pdb.set_trace()
+            a = np.argmax(np.mean([Q_a[s][:], Q_b[s][:]], axis=0))
 
         r = 0
 
-        while s is not mdp.is_terminal(s): # TODO: Finish episode/trajectory on terminal state
+        while not mdp.is_terminal(s): # TODO: Finish episode/trajectory on terminal state
             # Observe S and R
             s_new = np.argmax(mdp.T[s, a, :]) # TODO: Change to stochastic ?
             r = mdp.R[s_new]
@@ -40,11 +39,18 @@ def double_sarsa(mdp, alpha = 0.1, gamma = 0.9):
             if np.random.random_sample() <= epsilon:
                 a_new = np.random.random_integers(0, mdp.A-1)
             else:
-                a_new = np.argmax(Q[s_new][:])
+                a_new = np.argmax(np.mean([Q_a[s_new][:], Q_b[s_new][:]], axis=0))
 
-            Q[s][a] = Q[s][a] + alpha*(r + gamma*Q[s_new][a_new] - Q[s][a])
+            Q_a[s][a] = Q_a[s][a] + alpha*(r + gamma*Q_b[s_new][a_new] - Q_a[s][a])
             s = s_new
             a = a_new
 
             n_iter += 1
-    return Q
+
+            # With some probability .5, swap Q_a and Q_b when performing updates.
+            if np.random.random_sample() <= .5:
+                tmp = Q_a
+                Q_a = Q_b
+                Q_b = tmp
+
+    return np.mean([Q_a, Q_b], axis=0)
