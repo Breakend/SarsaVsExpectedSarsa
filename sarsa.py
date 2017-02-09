@@ -1,15 +1,16 @@
 import numpy as np
 
-def sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
+def sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9, epsilon = 0.1):
     # Initialization
     Q = [[0 for i in range(mdp.A)] for j in range(mdp.S)]
     old_Q = Q
     n_episode = 0
-    epsilon = 0.1
+    rewards_per_episode = []
+    max_reward = 0
     total_reward = 0
     while n_episode < max_episode:
         s = 0 # Initialize s, starting state
-
+        reward_for_episode = 0
         # With prob epsilon, pick a random action
         if np.random.random_sample() <= epsilon:
             a = np.random.random_integers(0, mdp.A-1)
@@ -30,6 +31,12 @@ def sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
             s = s_new
             a = a_new
             total_reward += r
+            reward_for_episode += r
+
+        if reward_for_episode > max_reward:
+            max_reward = reward_for_episode
+
+        rewards_per_episode.append(reward_for_episode)
 
         n_episode += 1
-    return Q, total_reward/max_episode
+    return Q, total_reward/max_episode, max_reward, rewards_per_episode
