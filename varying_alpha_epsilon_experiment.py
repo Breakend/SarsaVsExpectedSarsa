@@ -30,7 +30,7 @@ all_rewards_per_episode_double_expected_sarsa = []
 average_reward_sarsa = []
 all_rewards_per_episode_sarsa = []
 
-epsilon_values = [.1]
+epsilon_values = [.3]
 n=20000
 alphas = [x for x in np.arange(0.01, 1., .05)]
 # import pdb; pdb.set_trace()
