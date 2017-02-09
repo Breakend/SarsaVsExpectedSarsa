@@ -1,13 +1,13 @@
 import numpy as np
 
-def sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
+def expected_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
     # Initialization
-    Q = [[0 for i in range(mdp.A)] for j in range(mdp.S)]
+    Q = [[0.0 for i in range(mdp.A)] for j in range(mdp.S)]
     old_Q = Q
     n_episode = 0
     epsilon = 0.1
     total_reward = 0
-    while n_episode < max_episode:
+    while n_episode < max_episode: # TODO: Pick a finish condition for episode
         s = 0 # Initialize s, starting state
 
         # With prob epsilon, pick a random action
@@ -15,7 +15,8 @@ def sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
             a = np.random.random_integers(0, mdp.A-1)
         else:
             a = np.argmax(Q[s][:])
-        while not mdp.is_terminal(s):
+        r = 0
+        while not mdp.is_terminal(s): # TODO: Finish episode/trajectory on terminal state
             # Observe S and R
             s_new = np.argmax(mdp.T[s, a, :]) # TODO: Change to stochastic ?
             r = mdp.R[s_new]
@@ -26,7 +27,10 @@ def sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
                 a_new = np.random.random_integers(0, mdp.A-1)
             else:
                 a_new = np.argmax(Q[s_new][:])
-            Q[s][a] = Q[s][a] + alpha*(r + gamma*Q[s_new][a_new] - Q[s][a])
+
+            best_action = np.argmax(Q[s_new][:])
+            Q[s][a] = Q[s][a] + alpha*(r + gamma*((1-epsilon)*Q[s_new][best_action]+(epsilon/mdp.A)*sum(Q[s_new][act] for act in range(mdp.A))) - Q[s][a])
+
             s = s_new
             a = a_new
             total_reward += r

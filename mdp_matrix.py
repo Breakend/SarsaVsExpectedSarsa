@@ -37,7 +37,7 @@ class GridWorld(MDP):
             R[row[0], row[1]] = row[2]
         R = R.flatten()
 
-        A = 4.0
+        A = 4
         act_list = ['S', 'E', 'N', 'W']
 
         T = np.zeros((S, A, S))

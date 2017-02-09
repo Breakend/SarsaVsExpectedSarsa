@@ -1,8 +1,8 @@
 import numpy as np
 
-def double_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
+def double_expected_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
     """
-    A simple implementation of double sarsa
+    A simple implementation of double expected sarsa
     Ganger, Michael, Ethan Duryea, and Wei Hu.
     "Double Sarsa and Double Expected Sarsa with Shallow and Deep Learning."
     Journal of Data Analysis and Information Processing 4.04 (2016): 159.
@@ -39,7 +39,8 @@ def double_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
             else:
                 a_new = np.argmax(np.mean([Q_a[s_new][:], Q_b[s_new][:]], axis=0))
 
-            Q_a[s][a] = Q_a[s][a] + alpha*(r + gamma*Q_b[s_new][a_new] - Q_a[s][a])
+            best_action = np.argmax(np.mean([Q_a[s_new][:], Q_b[s_new][:]], axis=0))
+            Q_a[s][a] = Q_a[s][a] + alpha*(r + gamma*((1-epsilon)*Q_b[s_new][best_action]+(epsilon/mdp.A)*sum(Q_b[s_new][act] for act in range(mdp.A))) - Q_a[s][a])
             s = s_new
             a = a_new
 
