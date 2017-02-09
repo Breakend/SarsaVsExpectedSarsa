@@ -31,11 +31,11 @@ average_reward_sarsa = []
 all_rewards_per_episode_sarsa = []
 
 epsilon_values = [.1]
-n=100000
+n=20000
 alphas = [x for x in np.arange(0.01, 1., .05)]
 # import pdb; pdb.set_trace()
 
-number_of_runs = 10
+number_of_runs = 20
 
 for r in range(number_of_runs):
     for epsilon in epsilon_values:

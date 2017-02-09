@@ -32,72 +32,81 @@ all_rewards_per_episode_sarsa = []
 
 epsilon_values = [.5, .1, .01, .001, .0001]
 n= 10000
-for epsilon in epsilon_values:
-    Q, average_reward, max_reward, all_rewards = double_sarsa(gw,n , epsilon=epsilon)
-    average_reward_double_sarsa.append(average_reward)
-    all_rewards_per_episode_double_sarsa.append(all_rewards)
-    Q, average_reward, max_reward, all_rewards = expected_sarsa(gw, n, epsilon=epsilon)
-    average_reward_expected_sarsa.append(average_reward)
-    all_rewards_per_episode_expected_sarsa.append(all_rewards)
-    Q, average_reward, max_reward, all_rewards = double_expected_sarsa(gw, n, epsilon=epsilon)
-    average_reward_double_expected_sarsa.append(average_reward)
-    all_rewards_per_episode_double_expected_sarsa.append(all_rewards)
-    Q, average_reward, max_reward, all_rewards = sarsa(gw, n, epsilon=epsilon)
-    average_reward_sarsa.append(average_reward)
-    all_rewards_per_episode_sarsa.append(all_rewards)
+number_of_runs = 10
+
+for r in range(number_of_runs):
+    for epsilon in epsilon_values:
+        Q, average_reward, max_reward, all_rewards = double_sarsa(gw,n , epsilon=epsilon)
+        average_reward_double_sarsa.append(average_reward)
+        all_rewards_per_episode_double_sarsa.append(all_rewards)
+        Q, average_reward, max_reward, all_rewards = expected_sarsa(gw, n, epsilon=epsilon)
+        average_reward_expected_sarsa.append(average_reward)
+        all_rewards_per_episode_expected_sarsa.append(all_rewards)
+        Q, average_reward, max_reward, all_rewards = double_expected_sarsa(gw, n, epsilon=epsilon)
+        average_reward_double_expected_sarsa.append(average_reward)
+        all_rewards_per_episode_double_expected_sarsa.append(all_rewards)
+        Q, average_reward, max_reward, all_rewards = sarsa(gw, n, epsilon=epsilon)
+        average_reward_sarsa.append(average_reward)
+        all_rewards_per_episode_sarsa.append(all_rewards)
 
 # TODO: plot all sarsa, expected_sarsa, double_Sarsa
+average_reward_double_sarsa = np.mean(np.split(np.array(average_reward_double_sarsa), number_of_runs), axis=0)
+average_reward_expected_sarsa = np.mean(np.split(np.array(average_reward_expected_sarsa), number_of_runs), axis=0)
+average_reward_double_expected_sarsa = np.mean(np.split(np.array(average_reward_double_expected_sarsa), number_of_runs), axis=0)
+average_reward_sarsa = np.mean(np.split(np.array(average_reward_sarsa), number_of_runs), axis=0)
+
 plt.plot(epsilon_values, average_reward_double_sarsa, label="Double Sarsa")
 plt.plot(epsilon_values, average_reward_expected_sarsa, label="Expected Sarsa")
 plt.plot(epsilon_values, average_reward_double_expected_sarsa, label="Double Expected Sarsa")
 plt.plot(epsilon_values, average_reward_sarsa, label="Sarsa")
 plt.ylabel('Average reward')
 plt.xlabel('epsilon')
+
 ax = plt.gca()
 # ax.set_xscale('symlog')
 ax.legend(loc='upper right', shadow=True)
 plt.show()
-
-for x, e in zip(all_rewards_per_episode_double_sarsa, epsilon_values):
-    # import pdb; pdb.set_trace()
-    plt.plot(x, label="e=%s"%e)
-
-    # break
-
-plt.ylabel('Returns per episode')
-plt.xlabel('episode')
-
-ax = plt.gca()
-# ax.set_xscale('symlog')
-ax.legend(loc='lower right', shadow=True)
-plt.show()
-
-
-
-for x, e in zip(all_rewards_per_episode_expected_sarsa, epsilon_values):
-    # import pdb; pdb.set_trace()
-    plt.plot(x, label="e=%s"%e)
-
-    # break
-
-plt.ylabel('Returns per episode')
-plt.xlabel('episode')
-
-ax = plt.gca()
-# ax.set_xscale('symlog')
-ax.legend(loc='lower right', shadow=True)
-plt.show()
-
-for x, e in zip(all_rewards_per_episode_double_expected_sarsa, epsilon_values):
-    # import pdb; pdb.set_trace()
-    plt.plot(x, label="e=%s"%e)
-
-    # break
-
-plt.ylabel('Returns per episode')
-plt.xlabel('episode')
-
-ax = plt.gca()
-# ax.set_xscale('symlog')
-ax.legend(loc='lower right', shadow=True)
-plt.show()
+#
+# for x, e in zip(all_rewards_per_episode_double_sarsa, epsilon_values):
+#     # import pdb; pdb.set_trace()
+#     plt.plot(x, label="e=%s"%e)
+#
+#     # break
+#
+# plt.ylabel('Returns per episode')
+# plt.xlabel('episode')
+#
+# ax = plt.gca()
+# # ax.set_xscale('symlog')
+# ax.legend(loc='lower right', shadow=True)
+# plt.show()
+#
+#
+#
+# for x, e in zip(all_rewards_per_episode_expected_sarsa, epsilon_values):
+#     # import pdb; pdb.set_trace()
+#     plt.plot(x, label="e=%s"%e)
+#
+#     # break
+#
+# plt.ylabel('Returns per episode')
+# plt.xlabel('episode')
+#
+# ax = plt.gca()
+# # ax.set_xscale('symlog')
+# ax.legend(loc='lower right', shadow=True)
+# plt.show()
+#
+# for x, e in zip(all_rewards_per_episode_double_expected_sarsa, epsilon_values):
+#     # import pdb; pdb.set_trace()
+#     plt.plot(x, label="e=%s"%e)
+#
+#     # break
+#
+# plt.ylabel('Returns per episode')
+# plt.xlabel('episode')
+#
+# ax = plt.gca()
+# # ax.set_xscale('symlog')
+# ax.legend(loc='lower right', shadow=True)
+# plt.show()
