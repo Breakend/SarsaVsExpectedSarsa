@@ -76,3 +76,107 @@ class GridWorld(MDP):
                 # Flatten the feasibility grid and assign to transition matrix
                 T[start_state, act, :] = feas_grid.flatten()
         MDP.__init__(self, T, S, R, A, act_list, terminal_states)
+
+
+class WindyGridCliffMazeWorld(MDP):
+    def __init__(self, grid_size, reward_pos, terminal_states, obstacles = [[i, j, 0] for i in range(10) for j in range(10)], p_success = 0.7):
+        S = grid_size*grid_size
+
+        R = np.zeros((grid_size, grid_size))
+
+        # Each row of reward_pos is a tuple: x, y, reward
+        for row in reward_pos:
+            R[row[0], row[1]] = row[2]
+        R = R.flatten()
+
+        # Define actions
+        A = 4
+        act_list = ['S', 'E', 'N', 'W']
+
+        T = np.zeros((S, A, S))
+        for start_state in range(S):
+            state_i = start_state/grid_size
+            state_j = (start_state)%grid_size
+
+            # Actions indexed as: 0:S, 1:E, 2:N, 3:W
+            for act in range(A):
+                feas_grid = np.zeros((grid_size, grid_size))
+                if(act == 0 ): # Going South
+                    if state_i+1 < grid_size and obstacles[(state_i+1)*grid_size+state_j][2] != 1:
+                        feas_grid[state_i+1, state_j] = p_success
+                    else:
+                        feas_grid[state_i, state_j] = p_success
+
+                    if state_j+1 < grid_size and obstacles[(state_i)*grid_size+state_j+1][2] != 1:
+                        feas_grid[state_i, state_j+1] = (1.0-p_success)/3.0
+                    else:
+                        feas_grid[state_i, state_j ] += (1.0-p_success)/3.0
+                    if state_i-1 >= 0 and obstacles[(state_i-1)*grid_size+state_j][2] != 1:
+                        feas_grid[state_i-1, state_j] = (1.0-p_success)/3.0
+                    else:
+                        feas_grid[state_i, state_j ] += (1.0-p_success)/3.0
+                    if state_j-1 >= 0 and obstacles[(state_i)*grid_size+state_j-1][2] != 1:
+                        feas_grid[state_i, state_j-1] = (1.0-p_success)/3.0
+                    else:
+                        feas_grid[state_i, state_j ] += (1.0-p_success)/3.0
+
+                elif(act == 1): # Going East
+                    if state_j+1 < grid_size and obstacles[state_i*grid_size+state_j+1][2] != 1:
+                        feas_grid[state_i, state_j+1] = p_success
+                    else:
+                        feas_grid[state_i, state_j] = p_success
+
+                    if state_i+1 < grid_size and obstacles[(state_i+1)*grid_size+state_j][2] != 1:
+                        feas_grid[state_i+1, state_j] = (1.0-p_success)/3.0
+                    else:
+                        feas_grid[state_i, state_j ] += (1.0-p_success)/3.0
+                    if state_i-1 >= 0 and obstacles[(state_i-1)*grid_size+state_j][2] != 1:
+                        feas_grid[state_i-1, state_j] = (1.0-p_success)/3.0
+                    else:
+                        feas_grid[state_i, state_j ] += (1.0-p_success)/3.0
+                    if state_j-1 >= 0 and obstacles[(state_i)*grid_size+state_j-1][2] != 1:
+                        feas_grid[state_i, state_j-1] = (1.0-p_success)/3.0
+                    else:
+                        feas_grid[state_i, state_j ] += (1.0-p_success)/3.0
+
+                elif(act == 2): # Going North
+                    if state_i-1 >= 0 and obstacles[(state_i-1)*grid_size+state_j][2] != 1:
+                        feas_grid[state_i-1, state_j] = p_success
+                    else:
+                        feas_grid[state_i, state_j] = p_success
+
+                    if state_j+1 < grid_size and obstacles[(state_i)*grid_size+state_j+1][2] != 1:
+                        feas_grid[state_i, state_j+1] = (1.0-p_success)/3.0
+                    else:
+                        feas_grid[state_i, state_j ] += (1.0-p_success)/3.0
+                    if state_i+1 < grid_size and obstacles[(state_i+1)*grid_size+state_j][2] != 1:
+                        feas_grid[state_i+1, state_j] = (1.0-p_success)/3.0
+                    else:
+                        feas_grid[state_i, state_j ] += (1.0-p_success)/3.0
+                    if state_j-1 >= 0 and obstacles[(state_i)*grid_size+state_j-1][2] != 1:
+                        feas_grid[state_i, state_j-1] = (1.0-p_success)/3.0
+                    else:
+                        feas_grid[state_i, state_j ] += (1.0-p_success)/3.0
+
+                elif(act == 3): # Going West
+                    if state_j-1 >= 0 and obstacles[(state_i)*grid_size+state_j-1][2] != 1:
+                        feas_grid[state_i, state_j-1] = p_success
+                    else:
+                        feas_grid[state_i, state_j] = p_success
+
+                    if state_j+1 < grid_size and obstacles[(state_i)*grid_size+state_j+1][2] != 1:
+                        feas_grid[state_i, state_j+1] = (1.0-p_success)/3.0
+                    else:
+                        feas_grid[state_i, state_j ] += (1.0-p_success)/3.0
+                    if state_i+1 < grid_size and obstacles[(state_i+1)*grid_size+state_j][2] != 1:
+                        feas_grid[state_i+1, state_j] = (1.0-p_success)/3.0
+                    else:
+                        feas_grid[state_i, state_j ] += (1.0-p_success)/3.0
+                    if state_i-1 >= 0 and obstacles[(state_i-1)*grid_size+state_j][2] != 1:
+                        feas_grid[state_i-1, state_j] = (1.0-p_success)/3.0
+                    else:
+                        feas_grid[state_i, state_j ] += (1.0-p_success)/3.0
+
+                # Flatten the feasibility grid and assign to transition matrix
+                T[start_state, act, :] = feas_grid.flatten()
+        MDP.__init__(self, T, S, R, A, act_list, terminal_states)

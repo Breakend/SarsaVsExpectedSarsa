@@ -17,7 +17,7 @@ def sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
             a = np.argmax(Q[s][:])
         while not mdp.is_terminal(s):
             # Observe S and R
-            s_new = np.argmax(mdp.T[s, a, :]) # TODO: Change to stochastic ?
+            s_new = np.random.choice(range(mdp.S), p = mdp.T[s, a, :]) # TODO: Change to stochastic ?
             r = mdp.R[s_new]
             T_new = np.zeros((mdp.S, mdp.S))
 
