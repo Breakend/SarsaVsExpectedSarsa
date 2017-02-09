@@ -1,6 +1,6 @@
 import numpy as np
 
-def double_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
+def double_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9, epsilon=0.1):
     """
     A simple implementation of double sarsa
     Ganger, Michael, Ethan Duryea, and Wei Hu.
@@ -12,8 +12,9 @@ def double_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
     Q_b = [[0 for i in range(mdp.A)] for j in range(mdp.S)]
 
     n_episode = 0
-    epsilon = 0.1
     total_reward = 0
+    rewards_per_episode = []
+    max_reward = 0
 
     while n_episode < max_episode:
         s = 0 # Initialize s, starting state
@@ -26,6 +27,7 @@ def double_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
             a = np.argmax(np.mean([Q_a[s][:], Q_b[s][:]], axis=0))
 
         r = 0
+        reward_for_episode = 0
 
         while not mdp.is_terminal(s):
             # Observe S and R
@@ -50,7 +52,13 @@ def double_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
                 Q_b = tmp
 
             total_reward += r
+            reward_for_episode += r
+
+            if r > max_reward:
+                max_reward = r
+
+        rewards_per_episode.append(reward_for_episode)
 
         n_episode += 1
 
-    return np.mean([Q_a, Q_b], axis=0), total_reward/max_episode
+    return np.mean([Q_a, Q_b], axis=0), total_reward/max_episode, max_reward, rewards_per_episode
