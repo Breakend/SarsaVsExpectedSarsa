@@ -1,11 +1,12 @@
 import numpy as np
 
-def expected_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
+def expected_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9, epsilon = 0.1):
     # Initialization
     Q = [[0.0 for i in range(mdp.A)] for j in range(mdp.S)]
     old_Q = Q
     n_episode = 0
-    epsilon = 0.1
+    rewards_per_episode = []
+    max_reward = 0
     total_reward = 0
     while n_episode < max_episode: # TODO: Pick a finish condition for episode
         s = 0 # Initialize s, starting state
@@ -15,7 +16,9 @@ def expected_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
             a = np.random.random_integers(0, mdp.A-1)
         else:
             a = np.argmax(Q[s][:])
+
         r = 0
+        reward_for_episode = 0
         while not mdp.is_terminal(s): # TODO: Finish episode/trajectory on terminal state
             # Observe S and R
             s_new = np.argmax(mdp.T[s, a, :]) # TODO: Change to stochastic ?
@@ -34,6 +37,9 @@ def expected_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9):
             s = s_new
             a = a_new
             total_reward += r
-
+            reward_for_episode += r
+        if max_reward < reward_for_episode:
+            max_reward = reward_for_episode
+        rewards_per_episode.append(reward_for_episode)
         n_episode += 1
-    return Q, total_reward/max_episode
+    return Q, total_reward/max_episode, max_reward, rewards_per_episode

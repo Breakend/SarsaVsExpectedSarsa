@@ -54,8 +54,8 @@ def double_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9, epsilon=0.1):
             total_reward += r
             reward_for_episode += r
 
-            if r > max_reward:
-                max_reward = r
+        if reward_for_episode > max_reward:
+            max_reward = reward_for_episode
 
         rewards_per_episode.append(reward_for_episode)
 
