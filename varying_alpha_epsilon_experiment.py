@@ -30,7 +30,7 @@ all_rewards_per_episode_double_expected_sarsa = []
 average_reward_sarsa = []
 all_rewards_per_episode_sarsa = []
 
-epsilon = .01
+epsilon = .1
 n=10000
 alphas = [x for x in np.arange(0.0, 1., .05)]
 alphas[0] = .01
