@@ -37,16 +37,16 @@ number_of_runs = 5
 for r in range(number_of_runs):
     for epsilon in epsilon_values:
         print(epsilon)
-        Q, average_reward, max_reward, all_rewards = double_sarsa(gw,n , epsilon=epsilon)
+        Q, average_reward, max_reward, all_rewards, _ = double_sarsa(gw,n , epsilon=epsilon)
         average_reward_double_sarsa.append(average_reward)
         all_rewards_per_episode_double_sarsa.append(all_rewards)
-        Q, average_reward, max_reward, all_rewards = expected_sarsa(gw, n, epsilon=epsilon)
+        Q, average_reward, max_reward, all_rewards, _ = expected_sarsa(gw, n, epsilon=epsilon)
         average_reward_expected_sarsa.append(average_reward)
         all_rewards_per_episode_expected_sarsa.append(all_rewards)
-        Q, average_reward, max_reward, all_rewards = double_expected_sarsa(gw, n, epsilon=epsilon)
+        Q, average_reward, max_reward, all_rewards, _ = double_expected_sarsa(gw, n, epsilon=epsilon)
         average_reward_double_expected_sarsa.append(average_reward)
         all_rewards_per_episode_double_expected_sarsa.append(all_rewards)
-        Q, average_reward, max_reward, all_rewards = sarsa(gw, n, epsilon=epsilon)
+        Q, average_reward, max_reward, all_rewards, _ = sarsa(gw, n, epsilon=epsilon)
         average_reward_sarsa.append(average_reward)
         all_rewards_per_episode_sarsa.append(all_rewards)
 
