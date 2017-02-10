@@ -9,7 +9,10 @@ def sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9, epsilon = 0.1):
     max_reward = 0
     total_reward = 0
     while n_episode < max_episode:
-        s = 0 # Initialize s, starting state
+        try:
+            s = mdp.initial_state # Initialize s, starting state
+        except AttributeError:
+            s = 0
         reward_for_episode = 0
         # With prob epsilon, pick a random action
         if np.random.random_sample() <= epsilon:
@@ -18,7 +21,7 @@ def sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9, epsilon = 0.1):
             a = np.argmax(Q[s][:])
         while not mdp.is_terminal(s):
             # Observe S and R
-            s_new = np.random.choice(range(mdp.S), p = mdp.T[s, a, :]) # TODO: Change to stochastic ?
+            s_new = np.random.choice(range(mdp.S), p = mdp.T[s, a, :])
             r = mdp.R[s_new]
             T_new = np.zeros((mdp.S, mdp.S))
 

@@ -8,8 +8,12 @@ def expected_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9, epsilon = 0.1):
     rewards_per_episode = []
     max_reward = 0
     total_reward = 0
-    while n_episode < max_episode: # TODO: Pick a finish condition for episode
-        s = 0 # Initialize s, starting state
+    while n_episode < max_episode:
+        # Initialize s, starting state
+        try:
+            s = mdp.initial_state # Initialize s, starting state
+        except AttributeError:
+            s = 0
 
         # With prob epsilon, pick a random action
         if np.random.random_sample() <= epsilon:
@@ -19,9 +23,9 @@ def expected_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9, epsilon = 0.1):
 
         r = 0
         reward_for_episode = 0
-        while not mdp.is_terminal(s): # TODO: Finish episode/trajectory on terminal state
+        while not mdp.is_terminal(s):
             # Observe S and R
-            s_new = np.argmax(mdp.T[s, a, :]) # TODO: Change to stochastic ?
+            s_new = np.random.choice(range(mdp.S), p = mdp.T[s, a, :])
             r = mdp.R[s_new]
             T_new = np.zeros((mdp.S, mdp.S))
 
