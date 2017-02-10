@@ -15,6 +15,7 @@ def double_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9, epsilon=0.1):
     total_reward = 0
     rewards_per_episode = []
     max_reward = 0
+    Q_variances = []
 
     while n_episode < max_episode:
         # Initialize s, starting state
@@ -62,7 +63,8 @@ def double_sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9, epsilon=0.1):
             max_reward = reward_for_episode
 
         rewards_per_episode.append(reward_for_episode)
+        Q_variances.append(np.var(np.mean([Q_a, Q_b], axis=0)))
 
         n_episode += 1
 
-    return np.mean([Q_a, Q_b], axis=0), total_reward/max_episode, max_reward, rewards_per_episode
+    return np.mean([Q_a, Q_b], axis=0), total_reward/max_episode, max_reward, rewards_per_episode, Q_variances

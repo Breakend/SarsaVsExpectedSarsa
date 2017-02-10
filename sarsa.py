@@ -6,6 +6,7 @@ def sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9, epsilon = 0.1):
     old_Q = Q
     n_episode = 0
     rewards_per_episode = []
+    Q_variances = []
     max_reward = 0
     total_reward = 0
     while n_episode < max_episode:
@@ -40,6 +41,7 @@ def sarsa(mdp, max_episode, alpha = 0.1, gamma = 0.9, epsilon = 0.1):
             max_reward = reward_for_episode
 
         rewards_per_episode.append(reward_for_episode)
+        Q_variances.append(np.var(Q))
 
         n_episode += 1
-    return Q, total_reward/max_episode, max_reward, rewards_per_episode
+    return Q, total_reward/max_episode, max_reward, rewards_per_episode, Q_variances
