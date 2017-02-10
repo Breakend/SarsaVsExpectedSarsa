@@ -30,12 +30,13 @@ all_rewards_per_episode_double_expected_sarsa = []
 average_reward_sarsa = []
 all_rewards_per_episode_sarsa = []
 
-epsilon_values = [.5, .1, .01, .001, .0001]
+epsilon_values = [.3, .1, .01, .001, .0001]
 n= 10000
-number_of_runs = 10
+number_of_runs = 5
 
 for r in range(number_of_runs):
     for epsilon in epsilon_values:
+        print(epsilon)
         Q, average_reward, max_reward, all_rewards = double_sarsa(gw,n , epsilon=epsilon)
         average_reward_double_sarsa.append(average_reward)
         all_rewards_per_episode_double_sarsa.append(all_rewards)
@@ -55,12 +56,13 @@ average_reward_expected_sarsa = np.mean(np.split(np.array(average_reward_expecte
 average_reward_double_expected_sarsa = np.mean(np.split(np.array(average_reward_double_expected_sarsa), number_of_runs), axis=0)
 average_reward_sarsa = np.mean(np.split(np.array(average_reward_sarsa), number_of_runs), axis=0)
 
-plt.plot(epsilon_values, average_reward_double_sarsa, label="Double Sarsa")
-plt.plot(epsilon_values, average_reward_expected_sarsa, label="Expected Sarsa")
-plt.plot(epsilon_values, average_reward_double_expected_sarsa, label="Double Expected Sarsa")
-plt.plot(epsilon_values, average_reward_sarsa, label="Sarsa")
+plt.plot(average_reward_double_sarsa, label="Double Sarsa")
+plt.plot(average_reward_expected_sarsa, label="Expected Sarsa")
+plt.plot(average_reward_double_expected_sarsa, label="Double Expected Sarsa")
+plt.plot(average_reward_sarsa, label="Sarsa")
 plt.ylabel('Average reward')
 plt.xlabel('epsilon')
+plt.xticks([x for x in range(len(average_reward_sarsa))], epsilon_values)
 
 ax = plt.gca()
 # ax.set_xscale('symlog')
