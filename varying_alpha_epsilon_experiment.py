@@ -30,29 +30,29 @@ all_rewards_per_episode_double_expected_sarsa = []
 average_reward_sarsa = []
 all_rewards_per_episode_sarsa = []
 
-epsilon_values = [.3]
-n=20000
-alphas = [x for x in np.arange(0.01, 1., .05)]
+epsilon = .01
+n=10000
+alphas = [x for x in np.arange(0.0, 1., .05)]
+alphas[0] = .01
 # import pdb; pdb.set_trace()
 
 number_of_runs = 20
 
 for r in range(number_of_runs):
-    for epsilon in epsilon_values:
-        for alpha in alphas:
-            print(alpha)
-            Q, average_reward, max_reward, all_rewards = double_sarsa(gw, n, epsilon=epsilon, alpha=alpha)
-            average_reward_double_sarsa.append(average_reward)
-            all_rewards_per_episode_double_sarsa.append(all_rewards)
-            Q, average_reward, max_reward, all_rewards = expected_sarsa(gw, n, epsilon=epsilon, alpha=alpha)
-            average_reward_expected_sarsa.append(average_reward)
-            all_rewards_per_episode_expected_sarsa.append(all_rewards)
-            Q, average_reward, max_reward, all_rewards = double_expected_sarsa(gw, n, epsilon=epsilon, alpha=alpha)
-            average_reward_double_expected_sarsa.append(average_reward)
-            all_rewards_per_episode_double_expected_sarsa.append(all_rewards)
-            Q, average_reward, max_reward, all_rewards = sarsa(gw, n, epsilon=epsilon)
-            average_reward_sarsa.append(average_reward)
-            all_rewards_per_episode_sarsa.append(all_rewards)
+    for alpha in alphas:
+        print(alpha)
+        Q, average_reward, max_reward, all_rewards = double_sarsa(gw, n, epsilon=epsilon, alpha=alpha)
+        average_reward_double_sarsa.append(average_reward)
+        all_rewards_per_episode_double_sarsa.append(all_rewards)
+        Q, average_reward, max_reward, all_rewards = expected_sarsa(gw, n, epsilon=epsilon, alpha=alpha)
+        average_reward_expected_sarsa.append(average_reward)
+        all_rewards_per_episode_expected_sarsa.append(all_rewards)
+        Q, average_reward, max_reward, all_rewards = double_expected_sarsa(gw, n, epsilon=epsilon, alpha=alpha)
+        average_reward_double_expected_sarsa.append(average_reward)
+        all_rewards_per_episode_double_expected_sarsa.append(all_rewards)
+        Q, average_reward, max_reward, all_rewards = sarsa(gw, n, epsilon=epsilon)
+        average_reward_sarsa.append(average_reward)
+        all_rewards_per_episode_sarsa.append(all_rewards)
 
 
 
